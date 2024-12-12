@@ -10,7 +10,7 @@ services:
       - "9001:3306"
     volumes:
       - ~/Documents/cluster-pod/master1:/var/lib/mysql
-    networks:
+    network:
       - bridge
 
   master2:
@@ -22,31 +22,31 @@ services:
       - "9002:3306"
     volumes:
       - ~/Documents/cluster-pod/master2:/var/lib/mysql
-    networks:
+    network:
       - bridge
 
-  master3:
+  slave1:
     image: docker.io/library/mariadb:10.11.6
-    container_name: master3
+    container_name: slave1
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234
     ports:
       - "9003:3306"
     volumes:
       - ~/Documents/cluster-pod/slave1:/var/lib/mysql
-    networks:
+    network:
       - bridge
 
-  master4:
+  slave2:
     image: docker.io/library/mariadb:10.11.6
-    container_name: master4
+    container_name: slave2
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234
     ports:
       - "9004:3306"
     volumes:
       - ~/Documents/cluster-pod/slave2:/var/lib/mysql
-    networks:
+    network:
       - bridge
 
 
