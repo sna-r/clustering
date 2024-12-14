@@ -14,11 +14,8 @@
 # --print-defaults to see which it would actually understand and use.
 #
 # If you are new to MariaDB, check out https://mariadb.com/kb/en/basic-mariadb-articles/
-[mysqld] 
-bind-address = 0.0.0.0
-server-id = 2 
-log_bin = /var/log/mysql/mysql-bin.log 
 
+#
 # This group is read both by the client and the server
 # use it for options that affect everything
 #
@@ -31,3 +28,7 @@ socket = /run/mysqld/mysqld.sock
 
 !includedir /etc/mysql/mariadb.conf.d/
 !includedir /etc/mysql/conf.d/
+[mysqld] 
+bind-address = 0.0.0.0
+server-id = 3 
+log_bin = /var/log/mysql/mysql-bin.log

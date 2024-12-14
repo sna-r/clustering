@@ -16,13 +16,9 @@
 # If you are new to MariaDB, check out https://mariadb.com/kb/en/basic-mariadb-articles/
 [mysqld] 
 bind-address = 0.0.0.0
-port = 9003
 server-id = 3 
 log_bin = /var/log/mysql/mysql-bin.log 
-binlog_format=ROW 
-gtid_domain_id=3                     # Unique GTID domain for each server
-log_slave_updates                    # Ensures changes replicated to this server are logged
-#
+
 # This group is read both by the client and the server
 # use it for options that affect everything
 #
