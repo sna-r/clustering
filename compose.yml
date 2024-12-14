@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   master1:
-    image: docker.io/library/mariadb:10.11.6
+    image: 
     container_name: master1
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234
@@ -10,11 +10,10 @@ services:
       - "9001:3306"
     volumes:
       - ~/Documents/cluster-pod/master1:/var/lib/mysql
-    network:
-      - bridge
+    
 
   master2:
-    image: docker.io/library/mariadb:10.11.6
+    image: 
     container_name: master2
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234
@@ -22,11 +21,10 @@ services:
       - "9002:3306"
     volumes:
       - ~/Documents/cluster-pod/master2:/var/lib/mysql
-    network:
-      - bridge
+    
 
   slave1:
-    image: docker.io/library/mariadb:10.11.6
+    image: 
     container_name: slave1
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234
@@ -34,11 +32,10 @@ services:
       - "9003:3306"
     volumes:
       - ~/Documents/cluster-pod/slave1:/var/lib/mysql
-    network:
-      - bridge
+    
 
   slave2:
-    image: docker.io/library/mariadb:10.11.6
+    image: 
     container_name: slave2
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234
@@ -46,7 +43,6 @@ services:
       - "9004:3306"
     volumes:
       - ~/Documents/cluster-pod/slave2:/var/lib/mysql
-    network:
-      - bridge
+    
 
 

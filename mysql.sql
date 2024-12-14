@@ -55,8 +55,8 @@ CHANGE MASTER TO
   MASTER_PORT = 9002,
   MASTER_USER = 'master',
   MASTER_PASSWORD = 'master',
-  MASTER_LOG_FILE = 'mysql-bin.000003',   -- File from Master2
-  MASTER_LOG_POS = 358;                    -- Position from Master2
+  MASTER_LOG_FILE = 'mysql-bin.000003',  
+  MASTER_LOG_POS = 358;                  
 START SLAVE;
 
 -- server master2
@@ -65,8 +65,8 @@ CHANGE MASTER TO
   MASTER_PORT = 9001,
   MASTER_USER = 'master',
   MASTER_PASSWORD = 'master',
-  MASTER_LOG_FILE = 'mysql-bin.000001',   -- File from Master2
-  MASTER_LOG_POS = 783;                    -- Position from Master2
+  MASTER_LOG_FILE = 'mysql-bin.000001',   
+  MASTER_LOG_POS = 783;                   
 START SLAVE;
 
 -- server slave
@@ -75,6 +75,26 @@ CHANGE MASTER TO
   MASTER_PORT = 9004,
   MASTER_USER = 'master',
   MASTER_PASSWORD = 'master',
-  MASTER_LOG_FILE = 'mysql-bin.000001',   -- File from Master2
-  MASTER_LOG_POS = 328;                    -- Position from Master2
+  MASTER_LOG_FILE = 'mysql-bin.000001',   
+  MASTER_LOG_POS = 328;                    
+START SLAVE;
+
+-- server pc 
+CHANGE MASTER TO
+  MASTER_HOST = '127.0.0.1',
+  MASTER_PORT = 7777,
+  MASTER_USER = 'master',
+  MASTER_PASSWORD = 'master',
+  MASTER_LOG_FILE = 'mysql-bin.000002',   
+  MASTER_LOG_POS = 328;                   
+START SLAVE;
+
+-- server podman master
+CHANGE MASTER TO
+  MASTER_HOST = '172.10.188.214',
+  MASTER_PORT = 3307,
+  MASTER_USER = 'master',
+  MASTER_PASSWORD = 'master',
+  MASTER_LOG_FILE = 'mysql-bin.000019',   
+  MASTER_LOG_POS = 342;                    
 START SLAVE;
