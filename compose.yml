@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   master1:
-    image: 
+    image: mariadb:10.11.6
     container_name: master1
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234
@@ -13,7 +13,7 @@ services:
     
 
   master2:
-    image: 
+    image: mariadb:10.11.6
     container_name: master2
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234
@@ -24,7 +24,7 @@ services:
     
 
   slave1:
-    image: 
+    image: mariadb:10.11.6
     container_name: slave1
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234
@@ -35,7 +35,7 @@ services:
     
 
   slave2:
-    image: 
+    image: mariadb:10.11.6
     container_name: slave2
     environment:
       MARIADB_ROOT_PASSWORD: Admin1234

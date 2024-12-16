@@ -30,6 +30,11 @@ VALUES
 -- Retrieve all data from the 'employees' table to verify insertion
 SELECT * FROM employees;
 
+create user cluster_master IDENTIFIED by 'cluster';
+create database cluster_master;
+grant all PRIVILEGES on cluster_master.* to cluster_master;
+FLUSH PRIVILEGES;
+
 
 
 [mysqld]
@@ -48,25 +53,65 @@ CREATE USER 'master'@'%' IDENTIFIED BY 'master';
 GRANT REPLICATION SLAVE ON *.* TO 'master'@'%';
 FLUSH PRIVILEGES;
 
+-- haproxy check health user
+CREATE USER 'haproxy_check'@'%' IDENTIFIED BY 'haproxy';
+GRANT PROCESS, REPLICATION CLIENT ON *.* TO 'haproxy_check'@'%';
+FLUSH PRIVILEGES;
 
 -- server master1
+STOP SLAVE;
 CHANGE MASTER TO
   MASTER_HOST = 'master2',
-  MASTER_PORT = 9002,
+  MASTER_PORT = 3306,
   MASTER_USER = 'master',
   MASTER_PASSWORD = 'master',
   MASTER_LOG_FILE = 'mysql-bin.000003',  
-  MASTER_LOG_POS = 358;                  
+  MASTER_LOG_POS = 485;                  
 START SLAVE;
 
 -- server master2
+STOP SLAVE;
 CHANGE MASTER TO
   MASTER_HOST = 'master1',
-  MASTER_PORT = 9001,
+  MASTER_PORT = 3306,
   MASTER_USER = 'master',
   MASTER_PASSWORD = 'master',
-  MASTER_LOG_FILE = 'mysql-bin.000001',   
-  MASTER_LOG_POS = 783;                   
+  MASTER_LOG_FILE = 'mysql-bin.000003',   
+  MASTER_LOG_POS = 507;                   
+START SLAVE;
+
+-- channel thread
+STOP SLAVE;
+CHANGE MASTER TO
+  MASTER_HOST = 'master1',
+  MASTER_PORT = 3306,
+  MASTER_USER = 'master',
+  MASTER_PASSWORD = 'master',
+  MASTER_LOG_FILE = 'mysql-bin.000003',   
+  MASTER_LOG_POS = 507
+  FOR CHANNEL 'master1';                   
+START SLAVE;
+
+STOP SLAVE;
+CHANGE MASTER TO
+  MASTER_HOST = 'master1',
+  MASTER_PORT = 3306,
+  MASTER_USER = 'master',
+  MASTER_PASSWORD = 'master',
+  MASTER_LOG_FILE = 'mysql-bin.000003',   
+  MASTER_LOG_POS = 640
+  FOR CHANNEL 'master1_chan';                   
+START SLAVE;
+-----
+STOP SLAVE;
+CHANGE MASTER TO
+  MASTER_HOST = 'master2',
+  MASTER_PORT = 3306,
+  MASTER_USER = 'master',
+  MASTER_PASSWORD = 'master',
+  MASTER_LOG_FILE = 'mysql-bin.000003',   
+  MASTER_LOG_POS = 485
+  FOR CHANNEL 'master2_chan';                   
 START SLAVE;
 
 -- server slave
