@@ -23,7 +23,7 @@ if (isset($_POST['login'])) {
           if($password==$hashed_password){
             // Successful login
             $_SESSION['user_id'] = $user['id'];
-            header("Location: index.html");
+            header("Location: accueil.php");
             exit();
         } else {
             echo "Invalid password.";
