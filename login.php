@@ -5,25 +5,34 @@ error_reporting(E_ALL);
 session_start();
 require 'config.php';
 
-
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
+    echo "Starting login process...<br>"; // Debugging point 1
 
     // Prepare the SQL statement
-    $result = pg_prepare($conn, "login_query", "SELECT id, password FROM users WHERE username = $1");
-    $result = pg_execute($conn, "login_query", array($username));
+    $stmt = $conn->prepare("SELECT id, password FROM users WHERE username = ?");
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
+    }
+    echo "Prepared statement created.<br>"; // Debugging point 2
+
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    echo "Query executed successfully.<br>"; // Debugging point 3
 
     // Verify user exists and check password
-    if (pg_num_rows($result) > 0) {
-        $user = pg_fetch_assoc($result);
+    if ($result->num_rows > 0) {
+        echo "User found.<br>";
+        $user = $result->fetch_assoc();
         $hashed_password = $user['password'];
 
-        //if (password_verify($password, $hashed_password)) {
-          if($password==$hashed_password){
-            // Successful login
+        if ($password == $hashed_password) { // Replace this with password_verify if hashed
+            echo "Password matches.<br>";
             $_SESSION['user_id'] = $user['id'];
-            header("Location: index.html");
+            header("Location: accueil.php");
             exit();
         } else {
             echo "Invalid password.";
@@ -31,12 +40,8 @@ if (isset($_POST['login'])) {
     } else {
         echo "No user found with that username.";
     }
-    if ($login_failed) {
-    header("Location: index.php?error=Invalid credentials");
-    exit();
-    }
 
-    pg_free_result($result);
-    pg_close($conn);
+    $stmt->close();
+    $conn->close();
 }
 ?>

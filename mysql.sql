@@ -35,7 +35,16 @@ create database cluster_master;
 grant all PRIVILEGES on cluster_master.* to cluster_master;
 FLUSH PRIVILEGES;
 
-
+use cluster_master;
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+INSERT INTO users (username, password) 
+VALUES 
+    ('Sitraka', 'test'),
+    ('Ny Avo', 'test');
 
 [mysqld]
 server-id = 1
