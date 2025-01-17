@@ -28,7 +28,7 @@ if (isset($_POST['login'])) {
         } else {
             echo "Invalid password.";
         }
-    } else {
+    } else {    
         echo "No user found with that username.";
     }
     if ($login_failed) {

@@ -64,3 +64,6 @@ mijery status :
 ```sql
 SHOW SLAVE STATUS\G
 ```
+# TO DO
+- [ ] test
+- [x] vita
