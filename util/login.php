@@ -3,8 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
-require 'config.php';
-
+require '../conf/config.php';
+require_once '../routes/routes.php';
 
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
@@ -23,7 +23,7 @@ if (isset($_POST['login'])) {
           if($password==$hashed_password){
             // Successful login
             $_SESSION['user_id'] = $user['id'];
-            header("Location: accueil.php");
+            header("Location: /clustering/public/");
             exit();
         } else {
             echo "Invalid password.";
@@ -32,7 +32,7 @@ if (isset($_POST['login'])) {
         echo "No user found with that username.";
     }
     if ($login_failed) {
-    header("Location: index.php?error=Invalid credentials");
+    header("Location: /clustering/public/login?error=Invalid credentials");
     exit();
     }
 
