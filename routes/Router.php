@@ -4,12 +4,15 @@ class Router
 {
     public function handleRequest()
     {
-        // Check if the user is logged in
+        session_start(); // Start session if not already started
+
+        $route = isset($_GET['route']) ? $_GET['route'] : 'home';
+
         if ($this->isLoggedIn()) {
-            // If logged in, route to home or default route
-            $this->home();
+            // Handle authenticated routes
+            $this->dispatchAuthenticatedRoutes($route);
         } else {
-            // If not logged in, route to login page
+            // If not logged in, always route to login
             $this->login();
         }
     }
@@ -20,22 +23,47 @@ class Router
         return isset($_SESSION['user_id']);
     }
 
+    // Dispatch routes for logged-in users
+    private function dispatchAuthenticatedRoutes($route)
+    {
+        switch ($route) {
+            case 'dashboard':
+                $this->dashboard();
+                break;
+            case 'home':
+            default:
+                $this->home();
+                break;
+        }
+    }
+
     // Handle home route
     private function home()
     {
-        $this->renderView('accueil.php');
+        $this->renderView('accueil.php', 'Home Page');
+    }
+
+    // Handle dashboard route
+    private function dashboard()
+    {
+        $this->renderView('dashboard.php', 'Dashboard');
     }
 
     // Handle login route
     private function login()
     {
-        // Render login page
-        $this->renderView('login.php');
+        $this->renderView('login.php', 'Login', false); // Skip template for login
     }
 
-    // Render the view
-    private function renderView($view)
+    // Render the view with a default layout
+    private function renderView($view, $title = '', $useTemplate = true)
     {
-        include "../views/$view";
+        $content = "../views/$view";
+
+        if ($useTemplate) {
+            include "../views/layout.php"; // Load the main layout
+        } else {
+            include $content; // Load view without template
+        }
     }
 }

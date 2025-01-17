@@ -1,20 +1,5 @@
-<?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-?>
-<!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Login</title>
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/Login-Form-Basic-icons.css">
-</head>
-
-<body>
     <section class="position-relative py-4 py-xl-5">
         <div class="container">
             <div class="row mb-5">
@@ -57,7 +42,6 @@ error_reporting(E_ALL);
             </div>
         </div>
     </section>
-    <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
-</body>
+    
 
-</html>
+
