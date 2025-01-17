@@ -2,7 +2,7 @@
 // public/index.php
 session_start();
 // Include the router
-require_once '../routes/routes.php';
+// require_once '../routes/routes.php';
 require_once '../routes/Router.php';
 
 // Get the requested URI

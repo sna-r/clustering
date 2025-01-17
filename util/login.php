@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 require '../conf/config.php';
-require_once '../routes/routes.php';
+// require_once '../routes/routes.php';
 
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
