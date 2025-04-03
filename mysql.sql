@@ -65,8 +65,8 @@ CHANGE MASTER TO
   MASTER_PORT = 3306,
   MASTER_USER = 'master',
   MASTER_PASSWORD = 'master',
-  MASTER_LOG_FILE = 'mysql-bin.000003',  
-  MASTER_LOG_POS = 485;                  
+  MASTER_LOG_FILE = 'mysql-bin.000009',  
+  MASTER_LOG_POS = 568;                  
 START SLAVE;
 
 -- server master2
@@ -76,8 +76,8 @@ CHANGE MASTER TO
   MASTER_PORT = 3306,
   MASTER_USER = 'master',
   MASTER_PASSWORD = 'master',
-  MASTER_LOG_FILE = 'mysql-bin.000003',   
-  MASTER_LOG_POS = 507;                   
+  MASTER_LOG_FILE = 'mysql-bin.000013',   
+  MASTER_LOG_POS = 342;                   
 START SLAVE;
 
 -- channel thread
@@ -92,27 +92,30 @@ CHANGE MASTER TO
   FOR CHANNEL 'master1';                   
 START SLAVE;
 
-STOP SLAVE;
+STOP SLAVE 'master1_chan';
 CHANGE MASTER TO
   MASTER_HOST = 'master1',
   MASTER_PORT = 3306,
   MASTER_USER = 'master',
   MASTER_PASSWORD = 'master',
-  MASTER_LOG_FILE = 'mysql-bin.000003',   
-  MASTER_LOG_POS = 640
+  MASTER_LOG_FILE = 'mysql-bin.000013',   
+  MASTER_LOG_POS = 342
   FOR CHANNEL 'master1_chan';                   
-START SLAVE;
+START SLAVE 'master1_chan';
 -----
-STOP SLAVE;
+STOP SLAVE 'master2_chan';
 CHANGE MASTER TO
   MASTER_HOST = 'master2',
   MASTER_PORT = 3306,
   MASTER_USER = 'master',
   MASTER_PASSWORD = 'master',
-  MASTER_LOG_FILE = 'mysql-bin.000003',   
-  MASTER_LOG_POS = 485
+  MASTER_LOG_FILE = 'mysql-bin.000009',   
+  MASTER_LOG_POS = 568
   FOR CHANNEL 'master2_chan';                   
-START SLAVE;
+START SLAVE 'master2_chan';
+
+-- check channel status 
+show slave status for channel 'master2_chan' \G
 
 -- server slave
 CHANGE MASTER TO

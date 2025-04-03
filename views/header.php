@@ -15,6 +15,9 @@
       <li class="nav-item d-none d-md-block">
         <a href="?route=dashboard" class="nav-link">Dashboard</a>
       </li>
+      <li class="nav-item d-none d-md-block">
+        <a href="?route=admin" class="nav-link">Admin</a>
+      </li>
     </ul>
     <!--end::Start Navbar links-->
     <!--begin::End Navbar links-->

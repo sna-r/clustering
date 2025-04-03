@@ -27,6 +27,9 @@ class Router
     private function dispatchAuthenticatedRoutes($route)
     {
         switch ($route) {
+            case 'admin':
+                $this->admin();
+                break;
             case 'dashboard':
                 $this->dashboard();
                 break;
@@ -53,6 +56,12 @@ class Router
     private function login()
     {
         $this->renderView('login.php', 'Login', false); // Skip template for login
+    }
+
+    // Admin
+    private function admin()
+    {
+        $this->renderView('admin.php', 'Admin');
     }
 
     // Render the view with a default layout
