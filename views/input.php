@@ -18,7 +18,7 @@
                                 </svg>
                             </div>
                             <!-- Login form -->
-                            <form class="text-center" method="post" action="#">
+                            <form class="text-center" method="post" action="../util/inscri.php">
                                 <div class="mb-3">
                                     <input class="form-control" type="text" name="username" placeholder="Username" required>
                                 </div>
@@ -26,7 +26,7 @@
                                     <input class="form-control" type="password" name="password" placeholder="Password" required>
                                 </div>
                                 <div class="mb-3">
-                                    <button class="btn btn-primary d-block w-100" type="submit" name="login">Ajout</button>
+                                    <button class="btn btn-primary d-block w-100" type="submit" name="add">Ajout</button>
                                 </div>
                             </form>
                             <!-- Display error message if login fails -->

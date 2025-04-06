@@ -33,6 +33,9 @@ class Router
             case 'dashboard':
                 $this->dashboard();
                 break;
+            case 'inscri':
+                $this->inscri();
+                break;
             case 'home':
             default:
                 $this->home();
@@ -64,6 +67,10 @@ class Router
         $this->renderView('admin.php', 'Admin');
     }
 
+    private function inscri()
+    {
+        $this->renderView('input.php', 'Inscription');
+    }
     // Render the view with a default layout
     private function renderView($view, $title = '', $useTemplate = true)
     {

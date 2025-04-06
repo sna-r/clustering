@@ -18,6 +18,9 @@
       <li class="nav-item d-none d-md-block">
         <a href="?route=admin" class="nav-link">Admin</a>
       </li>
+      <li class="nav-item d-none d-md-block">
+        <a href="?route=inscri" class="nav-link">Ajout User</a>
+      </li>
     </ul>
     <!--end::Start Navbar links-->
     <!--begin::End Navbar links-->
