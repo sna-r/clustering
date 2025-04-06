@@ -30,3 +30,4 @@ build/
 
 /back/js/node_modules/
 /back/python/venv/
+/conf/.env
