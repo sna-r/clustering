@@ -30,7 +30,7 @@ app.post('/login', (req, res) => {
     // Open the connection
     db.connect((err) => {
         if (err) {
-            return res.status(500).json({ message: 'Database connection error' });
+            return res.status(500).json({ message: 'Database connection error', error: err.message });
         }
 
         const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
@@ -43,7 +43,12 @@ app.post('/login', (req, res) => {
             }
 
             if (results.length > 0) {
-                res.json({ message: 'Login successful!' });
+                const user = results[0]; // Assuming usernames are unique
+                res.json({
+                    message: 'Login successful!',
+                    user_id: user.id,
+                    username: user.username
+                });
             } else {
                 res.json({ message: 'Invalid credentials' });
             }
