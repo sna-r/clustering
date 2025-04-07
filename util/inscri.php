@@ -3,30 +3,39 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
-require '../conf/config.php';
-// require_once '../routes/routes.php';
 
-if (isset($_POST['add'])) {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-    // Prepare the SQL statement
-    $result = pg_prepare($conn, "add_query", "INSERT INTO users VALUES (default,$1,$2)");
-    $result = pg_execute($conn, "add_query", array($username ,$password));
+    // Backend API URL (choose either Node.js or Python)
+    $apiUrl = 'http://localhost:3000/add-user';
 
-    if ($result === false) {
-        echo "Failed to execute the SQL statement.";
-        exit();
-    }
+    // Prepare the data to send
+    $data = json_encode(['username' => $username, 'password' => $password]);
 
-    // Check if the insertion was successful
-    if (pg_affected_rows($result) > 0) {
-        echo "User registered successfully!";
+    // Initialize cURL
+    $ch = curl_init($apiUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($data)
+    ]);
+
+    // Execute the request
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    // Decode the response
+    if ($httpCode === 200) {
+        $responseData = json_decode($response, true);
+        echo "<p>" . htmlspecialchars($responseData['message']) . "</p>";
     } else {
-        echo "Failed to register the user.";
+        echo '<p>Error: Unable to add user.</p>';
     }
-
-    
-    pg_close($conn);
 }
+
 ?>

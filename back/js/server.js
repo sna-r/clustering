@@ -56,6 +56,38 @@ app.post('/login', (req, res) => {
     });
 });
 
+app.post('/add-user', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required' });
+    }
+
+    // Create a new connection for this request
+    const db = mysql.createConnection(dbConfig);
+
+    // Open the connection
+    db.connect((err) => {
+        if (err) {
+            console.error("Database Connection Error:", err.message);
+            return res.status(500).json({ message: 'Database connection error', error: err.message });
+        }
+
+        const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
+        db.query(query, [username, password], (err, results) => {
+            // Close the connection
+            db.end();
+
+            if (err) {
+                console.error("Database Query Error:", err.message);
+                return res.status(500).json({ message: 'Database error', error: err.message });
+            }
+
+            res.json({ message: 'User added successfully!' });
+        });
+    });
+});
+
 // Start Server
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

@@ -3,6 +3,7 @@ import pymysql
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
+from haproxy_manager import parse_haproxy_cfg, update_server_statuses, generate_haproxy_cfg, save_servers
 
 # Load environment variables from .env file
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', 'conf', '.env')
@@ -53,5 +54,52 @@ def login():
     except Exception as e:
         return jsonify({"error": f"MySQL Error: {e}"}), 500
 
+# Adding user
+@app.route('/add-user', methods=['POST'])
+def add_user():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({"message": "Username and password are required"}), 400
+
+    query = "INSERT INTO users (username, password) VALUES (%s, %s)"
+    try:
+        # Open a new connection for this request
+        db = pymysql.connect(**db_config)
+        cursor = db.cursor()
+
+        # Execute the query
+        cursor.execute(query, (username, password))
+        db.commit()  # Commit the transaction
+
+        # Close the connection
+        cursor.close()
+        db.close()
+
+        return jsonify({"message": "User added successfully!"})
+    except Exception as e:
+        return jsonify({"error": f"MySQL Error: {e}"}), 500
+
+
+# New /update-haproxy endpoint
+@app.route('/update-haproxy', methods=['POST'])
+def update_haproxy():
+    try:
+        # Step 1: Parse haproxy.cfg
+        servers = parse_haproxy_cfg()
+
+        # Step 2: Update server statuses
+        servers = update_server_statuses(servers)
+        save_servers(servers)
+
+        # Step 3: Generate a new haproxy.cfg
+        generate_haproxy_cfg(servers)
+
+        return jsonify({"message": "HAProxy configuration updated successfully."})
+    except Exception as e:
+        return jsonify({"error": f"Failed to update HAProxy: {e}"}), 500
+        
 if __name__ == '__main__':
     app.run(port=3000, debug=True)
