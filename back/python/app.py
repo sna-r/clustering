@@ -26,7 +26,7 @@ def login():
     username = data.get('username')
     password = data.get('password')
 
-    query = "SELECT * FROM users WHERE username = %s AND password = %s"
+    query = "SELECT id,username FROM users WHERE username = %s AND password = %s"
     try:
         # Open a new connection for this request
         db = pymysql.connect(**db_config)
@@ -34,14 +34,20 @@ def login():
 
         # Execute the query
         cursor.execute(query, (username, password))
-        result = cursor.fetchall()
+        result = cursor.fetchone()
 
         # Close the connection
         cursor.close()
         db.close()
 
         if result:
-            return jsonify({"message": "Login successful!"})
+            # print(f"Query result: {result}")
+            user_id, username = result
+            return jsonify({
+                "message": "Login successful!",
+                "user_id": user_id,
+                "username": username
+            })
         else:
             return jsonify({"message": "Invalid credentials"}), 401
     except Exception as e:

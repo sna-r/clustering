@@ -3,40 +3,45 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
-require '../conf/config.php';
-// require_once '../routes/routes.php';
 
-if (isset($_POST['login'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
-    // Prepare the SQL statement
-    $result = pg_prepare($conn, "login_query", "SELECT id, password FROM users WHERE username = $1");
-    $result = pg_execute($conn, "login_query", array($username));
+        // Backend API URL (choose either Node.js or Python)
+        $apiUrl = 'http://localhost:3000/login';
 
-    // Verify user exists and check password
-    if (pg_num_rows($result) > 0) {
-        $user = pg_fetch_assoc($result);
-        $hashed_password = $user['password'];
+        // Prepare the data to send
+        $data = json_encode(['username' => $username, 'password' => $password]);
 
-        //if (password_verify($password, $hashed_password)) {
-          if($password==$hashed_password){
-            // Successful login
-            $_SESSION['user_id'] = $user['id'];
+        // Initialize cURL
+        $ch = curl_init($apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data)
+        ]);
+
+        // Execute the request
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        // Decode the response
+        if ($httpCode === 200) {
+            $responseData = json_decode($response, true);
+            $message = htmlspecialchars($responseData['message']);
+            $userId = isset($responseData['user_id']) ? $responseData['user_id'] : null;
+            $username = isset($responseData['username']) ? $responseData['username'] : null;
+            $_SESSION['user_id'] = $userId;
             header("Location: /clustering/public/");
             exit();
         } else {
-            echo "Invalid password.";
+            header("Location: /clustering/public/login?error=Invalid credentials");
+            exit();
         }
-    } else {    
-        echo "No user found with that username.";
     }
-    if ($login_failed) {
-    header("Location: /clustering/public/login?error=Invalid credentials");
-    exit();
-    }
-
-    pg_free_result($result);
-    pg_close($conn);
-}
+    
 ?>
