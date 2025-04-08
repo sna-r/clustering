@@ -101,7 +101,7 @@ def update_server_statuses(servers):
             port = server["port"]
             is_online = check_server_status(ip, port)
             server["status"] = "online" if is_online else "offline"
-            server["last_checked"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            server["lastChecked"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return servers
 
 # Function to generate a new haproxy.cfg

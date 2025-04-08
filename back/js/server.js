@@ -3,6 +3,7 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '..', 'conf', '.env') });
 const haproxyManager = require('./haproxy_manager');
 
@@ -101,6 +102,32 @@ app.post('/update-haproxy', async (req, res) => {
         res.json({ message: 'HAProxy configuration updated successfully.' });
     } catch (error) {
         res.status(500).json({ error: `Failed to update HAProxy: ${error.message}` });
+    }
+});
+
+// Load the JSON data from the file
+function loadServerData(filePath) {
+    const rawData = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(rawData);
+}
+
+// Endpoint to get all server data
+app.get('/servers', (req, res) => {
+    const filePath = "../../data/servers.json"; // Path to your JSON file
+    const servers = loadServerData(filePath);
+    res.json(servers);
+});
+
+// Endpoint to get servers by type (e.g., "web server" or "database server")
+app.get('/servers/:serverType', (req, res) => {
+    const filePath = "../../data/servers.json"; // Path to your JSON file
+    const servers = loadServerData(filePath);
+    const serverType = req.params.serverType;
+
+    if (servers[serverType]) {
+        res.json(servers[serverType]);
+    } else {
+        res.status(404).json({ error: `No servers found for type: ${serverType}` });
     }
 });
 

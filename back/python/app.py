@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import json
 import pymysql
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -101,6 +102,29 @@ def update_haproxy():
         return jsonify({"message": "HAProxy configuration updated successfully."})
     except Exception as e:
         return jsonify({"error": f"Failed to update HAProxy: {e}"}), 500
+
+# Load the JSON data from the file
+def load_server_data(json_file_path):
+    with open(json_file_path, "r") as file:
+        return json.load(file)
+
+# Endpoint to get all server data
+@app.route('/servers', methods=['GET'])
+def get_all_servers():
+    json_file_path = "../../data/servers.json"  # Path to your JSON file
+    servers = load_server_data(json_file_path)
+    return jsonify(servers)
+
+# Endpoint to get servers by type (e.g., "web server" or "database server")
+@app.route('/servers/<server_type>', methods=['GET'])
+def get_servers_by_type(server_type):
+    json_file_path = "../../data/servers.json"  # Path to your JSON file
+    servers = load_server_data(json_file_path)
+    
+    if server_type in servers:
+        return jsonify(servers[server_type])
+    else:
+        return jsonify({"error": f"No servers found for type: {server_type}"}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0' , port=3000, debug=True)
