@@ -27,7 +27,7 @@ function copyFile(sourcePath, destinationPath) {
 }
 
 // Function to parse haproxy.cfg
-function parseHaproxyCfg() {
+async function parseHaproxyCfg() {
     //const servers = { webservers: [], mysql_masters: [], mysql_slaves: [] };
     //let currentBackend = null;
 
@@ -78,6 +78,8 @@ function parseHaproxyCfg() {
          }
      });
  
+     await updateServerStatuses(serversByType);
+
      // Write the parsed data to a JSON file
      fs.writeFileSync(JSON_FILE, JSON.stringify(serversByType, null, 4));
      console.log(`JSON file has been created: ${JSON_FILE}`);

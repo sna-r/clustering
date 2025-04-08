@@ -68,6 +68,8 @@ def parse_haproxy_cfg():
                     "backup": "Yes" if is_backup else "No"  # Backup status
                 })
 
+    servers_by_type = update_server_statuses(servers_by_type)
+
     # Write the parsed data to a JSON file
     with open(JSON_FILE, "w") as jsonfile:
         json.dump(servers_by_type, jsonfile, indent=4)

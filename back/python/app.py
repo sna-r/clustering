@@ -88,10 +88,11 @@ def add_user():
 def update_haproxy():
     try:
         # Step 1: Parse haproxy.cfg
-        servers = parse_haproxy_cfg()
+        # servers = parse_haproxy_cfg()
+        parse_haproxy_cfg()
 
         # Step 2: Update server statuses
-        servers = update_server_statuses(servers)
+        # servers = update_server_statuses(servers)
         # save_servers(servers)
 
         # Step 3: Generate a new haproxy.cfg
