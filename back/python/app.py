@@ -92,14 +92,14 @@ def update_haproxy():
 
         # Step 2: Update server statuses
         servers = update_server_statuses(servers)
-        save_servers(servers)
+        # save_servers(servers)
 
         # Step 3: Generate a new haproxy.cfg
-        generate_haproxy_cfg(servers)
+        # generate_haproxy_cfg(servers)
 
         return jsonify({"message": "HAProxy configuration updated successfully."})
     except Exception as e:
         return jsonify({"error": f"Failed to update HAProxy: {e}"}), 500
-        
+
 if __name__ == '__main__':
-    app.run(port=3000, debug=True)
+    app.run(host='0.0.0.0' , port=3000, debug=True)

@@ -64,6 +64,11 @@ mijery status :
 ```sql
 SHOW SLAVE STATUS\G
 ```
+mandefa apache docker 
+```bash
+docker-compose -f filename up -d 
+```
+
 # TO DO
 - [ ] test
 - [x] vita

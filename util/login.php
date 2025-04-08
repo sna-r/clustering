@@ -9,7 +9,7 @@ session_start();
         $password = $_POST['password'];
 
         // Backend API URL (choose either Node.js or Python)
-        $apiUrl = 'http://localhost:3000/login';
+        $apiUrl = 'http://192.168.0.108:3000/login';
 
         // Prepare the data to send
         $data = json_encode(['username' => $username, 'password' => $password]);

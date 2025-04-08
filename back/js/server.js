@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '..', 'conf', '.env') });
+const haproxyManager = require('./haproxy_manager');
 
 const app = express();
 const port = 3000;
@@ -88,7 +89,22 @@ app.post('/add-user', (req, res) => {
     });
 });
 
+// New /update-haproxy endpoint
+app.post('/update-haproxy', async (req, res) => {
+    try {
+        // Call HAProxy management functions
+        //let servers = haproxyManager.parseHaproxyCfg();
+        //servers = await haproxyManager.updateServerStatuses(servers);
+        //haproxyManager.saveServers(servers);
+        //haproxyManager.generateHaproxyCfg(servers);
+        haproxyManager.parseHaproxyCfg();
+        res.json({ message: 'HAProxy configuration updated successfully.' });
+    } catch (error) {
+        res.status(500).json({ error: `Failed to update HAProxy: ${error.message}` });
+    }
+});
+
 // Start Server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0',() => {
     console.log(`Server running on http://localhost:${port}`);
 });
